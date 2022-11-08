@@ -62,6 +62,9 @@
     "@koishijs/plugin-suggest": "^1.1.5",
     "koishi": "^4.10.0",
     "koishi-plugin-gocqhttp": "^3.1.4",
-    "yml-register": "^1.1.0"
+    "yml-register": "^1.1.0",
+    "@ifrank/koishi-plugin-drift-bottle": "workspace:1.0.0",
+    "@ifrank/koishi-plugin-venti-voices-chinese": "workspace:1.0.0",
+    "@ifrank/koishi-plugin-waiting-for-venti": "workspace:1.0.0"
   }
 }

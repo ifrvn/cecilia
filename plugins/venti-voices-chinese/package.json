@@ -1,0 +1,20 @@
+{
+  "name": "@ifrank/koishi-plugin-venti-voices-chinese",
+  "private": true,
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/lodash": "4.14.188"
+  },
+  "peerDependencies": {
+    "koishi": "^4.10.0"
+  }
+}

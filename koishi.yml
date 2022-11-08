@@ -2,6 +2,10 @@ host: localhost
 port: 5140
 maxPort: 5149
 plugins:
+  group:dev:
+    '@ifrank/drift-bottle': null
+    ~@ifrank/venti-voices-chinese: null
+    ~@ifrank/waiting-for-venti: null
   group:basic:
     help: null
     rate-limit: null
@@ -10,9 +14,10 @@ plugins:
     commands: null
     ~admin: null
     ~bind: null
+    $collapsed: true
   group:console:
     console:
-      open: true
+      open: false
     dataview: null
     logger: null
     insight: null
@@ -24,6 +29,7 @@ plugins:
     sandbox: null
     status: null
     ~auth: null
+    $collapsed: true
   group:database:
     database-sqlite: null
     ~database-mysql: null

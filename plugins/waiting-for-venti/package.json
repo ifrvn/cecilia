@@ -1,0 +1,21 @@
+{
+  "name": "@ifrank/koishi-plugin-waiting-for-venti",
+  "private": true,
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
+  "peerDependencies": {
+    "@koishijs/plugin-adapter-onebot": "^5.3.4",
+    "koishi": "^4.10.0"
+  },
+  "devDependencies": {
+    "@koishijs/plugin-help": "^1.2.5"
+  }
+}

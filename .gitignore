@@ -4,7 +4,6 @@ dist
 accounts
 logs
 *.db
-.env
 
 node_modules
 npm-debug.log

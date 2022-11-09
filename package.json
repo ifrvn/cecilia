@@ -25,9 +25,18 @@
     "@koishijs/client": "^4.6.10",
     "@koishijs/scripts": "^3.2.4",
     "@types/node": "^18.6.4",
+    "@typescript-eslint/eslint-plugin": "^5.42.1",
+    "@typescript-eslint/parser": "^5.42.1",
     "cross-env": "^7.0.3",
     "esbuild": "^0.14.51",
     "esbuild-register": "^3.3.3",
+    "eslint": "^8.27.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.5.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-vue": "^9.7.0",
     "typescript": "^4.8.3",
     "yakumo": "^0.3.6",
     "yakumo-esbuild": "^0.3.18",
@@ -39,6 +48,9 @@
     "yakumo-version": "^0.3.1"
   },
   "dependencies": {
+    "@ifrank/koishi-plugin-drift-bottle": "workspace:1.0.0",
+    "@ifrank/koishi-plugin-venti-voices-chinese": "workspace:1.0.0",
+    "@ifrank/koishi-plugin-waiting-for-venti": "workspace:1.0.0",
     "@koishijs/cli": "^4.10.0",
     "@koishijs/plugin-adapter-discord": "^3.3.1",
     "@koishijs/plugin-adapter-kook": "^3.4.1",
@@ -62,9 +74,6 @@
     "@koishijs/plugin-suggest": "^1.1.5",
     "koishi": "^4.10.0",
     "koishi-plugin-gocqhttp": "^3.1.4",
-    "yml-register": "^1.1.0",
-    "@ifrank/koishi-plugin-drift-bottle": "workspace:1.0.0",
-    "@ifrank/koishi-plugin-venti-voices-chinese": "workspace:1.0.0",
-    "@ifrank/koishi-plugin-waiting-for-venti": "workspace:1.0.0"
+    "yml-register": "^1.1.0"
   }
 }

@@ -36,9 +36,14 @@ plugins:
     ~database-mongo: null
     $collapsed: true
   group:adapter:
-    ~adapter-onebot: null
+    gocqhttp: null
+    adapter-onebot:
+      selfId: '123456789' # QQ号
+      protocol: ws
+      endpoint: ws://127.0.0.1:6700
+      gocqhttp:
+        enabled: true
+        password: '******' # QQ 密码
     ~adapter-discord: null
     ~adapter-telegram: null
     ~adapter-kook: null
-    gocqhttp: null
-    $collapsed: true

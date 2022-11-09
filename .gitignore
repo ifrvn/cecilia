@@ -2,7 +2,6 @@
 lib
 dist
 accounts
-go-cqhttp
 logs
 *.db
 .env
@@ -21,4 +20,3 @@ tsconfig.tsbuildinfo
 *.ntvs*
 *.njsproj
 *.sln
-

@@ -55,6 +55,7 @@ export default class DriftBottlePlugin {
     fishBottleKey: Schema.string().default('捞瓶子'),
     prefix: Schema.string().default('#')
   })
+
   private readonly tableName = 'drift_bottle'
   private readonly logger: Logger
   private readonly NUMBER_PER_PAGE = 10

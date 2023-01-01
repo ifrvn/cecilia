@@ -1,6 +1,6 @@
 import SQLiteDriver from '@minatojs/driver-sqlite/lib/index'
 import { BindParams, Statement } from '@minatojs/sql.js'
-import { Context, Direction, Keys, Selection } from 'koishi'
+import { Context, Direction, Keys, Selection, $ } from 'koishi'
 import { DriftBottle } from '.'
 import { outdent } from 'outdent'
 
@@ -17,6 +17,12 @@ export default class BottleService {
   }
 
   constructor(private readonly ctx: Context) {}
+
+  async count() {
+    return await this.ctx.database
+      .select('drift_bottle')
+      .execute((row) => $.count(row.id))
+  }
 
   async getAll(
     options: {
@@ -45,11 +51,38 @@ export default class BottleService {
     return await this.ctx.database.select('drift_bottle', { content }).execute()
   }
 
+  async search(s: string, options: {
+    limit: number
+    offset: number
+  } = {
+    limit: 10,
+    offset: 0,
+  }) {
+    const { limit, offset } = options
+    // TODO SQLiteDriver 有bug，使用$regex会报错，等修 https://github.com/koishijs/koishi/issues/894
+    const selection = this.ctx.database.select('drift_bottle', {
+      $or: [
+        { userId: { $regex: new RegExp(s) } },
+        { guildId: { $regex: new RegExp(s) } },
+        { content: { $regex: new RegExp(s) } }
+      ]
+    })
+    selection.limit(limit ?? 10).offset(offset ?? 0)
+    const data = await selection.execute()
+    const totalLines = await selection.execute(row => $.count(row.id))
+    return {
+      page: Math.floor(offset / limit) + 1,
+      totalLines,
+      totalPages: Math.ceil(totalLines / limit),
+      data
+    }
+  }
+
   async update(id: number, data: Partial<Exclude<DriftBottle, 'id'>>) {
     return await this.ctx.database.set('drift_bottle', id, data)
   }
 
- async delete (id: number) {
+  async delete (id: number) {
     return await this.ctx.database.remove('drift_bottle', { id })
   }
 

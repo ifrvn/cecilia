@@ -1,5 +1,6 @@
 import { Context, Logger, Universal, Next, segment, Session, Schema } from 'koishi'
 import {} from '@koishijs/plugin-console'
+import {} from 'cosmokit'
 import { OneBot } from '@satorijs/adapter-onebot'
 import { resolve } from 'path'
 import BottleService from './service'
@@ -10,6 +11,24 @@ declare module 'koishi' {
   }
   interface Tables {
     drift_bottle: DriftBottle
+  }
+}
+
+declare module '@koishijs/plugin-console' {
+  interface Events {
+    'get-data': (page: number) => Promise<{
+      page: number
+      totalLines: number
+      totalPages: number
+      data: DriftBottle[]
+    }>
+    'search': (s: string, page: number) => Promise<{
+      page: number
+      totalLines: number
+      totalPages: number
+      data: DriftBottle[]
+    }>
+    'switch-ban': (id: number, ban: boolean) => Promise<boolean>
   }
 }
 
@@ -30,16 +49,15 @@ export interface Config {
 }
 
 export default class DriftBottlePlugin {
-  readonly name = 'drift-bottle'
-  readonly using = ['database'] as const
+  static using = ['database', 'console', 'logger'] as const
   static Config = Schema.object({
     throwBottleKey: Schema.string().default('丢个瓶子'),
     fishBottleKey: Schema.string().default('捞瓶子'),
     prefix: Schema.string().default('#')
   })
-
   private readonly tableName = 'drift_bottle'
   private readonly logger: Logger
+  private readonly NUMBER_PER_PAGE = 10
   private readonly regs = () => {
     return {
       fishBottleReg: new RegExp(
@@ -71,7 +89,7 @@ export default class DriftBottlePlugin {
     private readonly ctx: Context,
     private readonly config: Config
   ) {
-    this.logger = ctx.logger(this.name)
+    this.logger = ctx.logger('DriftBottlePlugin')
     this.service = new BottleService(ctx)
 
     this.config = new DriftBottlePlugin.Config(config)
@@ -101,11 +119,43 @@ export default class DriftBottlePlugin {
       }
     )
 
-    ctx.using(['console'], (ctx) => {
-      ctx.console.addEntry({
-        dev: resolve(__dirname, '../client/index.ts'),
-        prod: resolve(__dirname, '../dist')
+    ctx.console.addListener('get-data', async (page) => {
+      const [totalLines, data] = await Promise.all([
+        this.service.count(),
+        this.service.getAll({
+          offset: (page - 1) * this.NUMBER_PER_PAGE,
+          limit: this.NUMBER_PER_PAGE
+        })
+      ])
+      return {
+        page,
+        totalLines,
+        totalPages: Math.ceil(totalLines / this.NUMBER_PER_PAGE),
+        data
+      }
+    })
+
+    ctx.console.addListener('search', async (s, page) => {
+      return await this.service.search(s, {
+        offset: (page - 1) * this.NUMBER_PER_PAGE,
+        limit: this.NUMBER_PER_PAGE
       })
+    })
+
+    ctx.console.addListener('switch-ban', async (id, ban) => {
+      try {
+        await this.switchBan(id, ban)
+        this.logger.info(`id: ${id}, ban: ${ban.toString()}`)
+        return true
+      } catch (error) {
+        this.logger.warn(error)
+        return false
+      }
+    })
+
+    ctx.console.addEntry({
+      dev: resolve(__dirname, '../client/index.ts'),
+      prod: resolve(__dirname, '../dist')
     })
 
     ctx.middleware(this.callback.bind(this))
@@ -236,7 +286,7 @@ export default class DriftBottlePlugin {
     const bottle = await this.service.find(content)
     if (bottle.length === 0) return this.templates.bottleNotFound
 
-    await this.ban(bottle[0].id)
+    await this.switchBan(bottle[0].id)
     await session.send(
       segment('quote', { id: session.messageId! }).toString() + this.templates.removeBottle
     )
@@ -279,9 +329,9 @@ export default class DriftBottlePlugin {
     })
   }
 
-  private async ban (id: number) {
+  private async switchBan (id: number, ban = true) {
     return await this.service.update(id, {
-      bannedAt: new Date()
+      bannedAt: ban ? new Date() : new Date(0)
     })
   }
 }

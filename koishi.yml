@@ -1,49 +1,50 @@
 host: localhost
 port: 5140
 maxPort: 5149
+nickname:
+  - 温迪
+  - Venti
+  - venti
+
 plugins:
   group:dev:
-    '@ifrank/drift-bottle': null
-    ~@ifrank/venti-voices-chinese: null
-    ~@ifrank/waiting-for-venti: null
+    ~@ifrank/drift-bottle: {}
+    ~@ifrank/venti-voices-chinese: {}
+    ~@ifrank/waiting-for-venti: {}
   group:basic:
-    help: null
-    rate-limit: null
-    suggest: null
-    locales: null
-    commands: null
-    ~admin: null
-    ~bind: null
-    $collapsed: true
+    help: {}
+    rate-limit: {}
+    locales: {}
+    commands: {}
+    ~admin: {}
+    ~bind: {}
   group:console:
+    analytics: {}
     console:
       open: false
-    dataview: null
-    logger: null
-    insight: null
+    dataview: {}
+    logger: {}
+    insight: {}
     market:
       registry:
         endpoint: https://registry.npmmirror.com
       search:
         endpoint: https://registry.koishi.chat/index.json
-    sandbox: null
-    status: null
-    ~auth: null
-    $collapsed: true
+    sandbox: {}
+    status: {}
+    ~auth: {}
   group:database:
-    database-sqlite: null
-    ~database-mysql: null
-    ~database-mongo: null
+    database-sqlite: {}
+    assets-smms:
+      token:
     $collapsed: true
   group:adapter:
-    gocqhttp: null
+    gocqhttp: {}
     adapter-onebot:
-      selfId: '123456789' # QQ号
+      selfId: '123456789'
       protocol: ws
       endpoint: ws://127.0.0.1:6700
       gocqhttp:
         enabled: true
-        password: '******' # QQ 密码
-    ~adapter-discord: null
-    ~adapter-telegram: null
-    ~adapter-kook: null
+        password:
+  ~dialogue: {}

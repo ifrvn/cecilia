@@ -15,17 +15,17 @@
   },
   "devDependencies": {
     "@element-plus/icons-vue": "^2.0.10",
-    "@koishijs/client": "^5.0.1",
-    "@koishijs/plugin-console": "^5.0.1",
-    "@minatojs/driver-sqlite": "^3.1.0",
+    "@koishijs/client": "^5.1.10",
+    "@koishijs/plugin-console": "^5.1.10",
+    "@minatojs/driver-sqlite": "^3.2.3",
     "@minatojs/sql.js": "^2.0.0",
-    "@satorijs/adapter-onebot": "^5.4.4",
+    "@satorijs/adapter-onebot": "^5.5.4",
     "@types/lodash": "^4.14.191",
     "cosmokit": "^1.4.0",
-    "element-plus": "^2.2.27",
+    "element-plus": "^2.2.28",
     "vue": "^3.2.45"
   },
   "peerDependencies": {
-    "koishi": "^4.10.10"
+    "koishi": "^4.11.1"
   }
 }

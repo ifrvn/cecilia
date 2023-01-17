@@ -34,7 +34,7 @@ export default class BottleService {
       limit: 10,
       offset: 0,
     }
-  ) {
+  ) { 
     const { fields, orderBy, limit, offset } = options
     const selection = this.ctx.database.select('drift_bottle')
     if (orderBy != null) selection.orderBy(orderBy.field, orderBy.order)
@@ -59,7 +59,6 @@ export default class BottleService {
     offset: 0,
   }) {
     const { limit, offset } = options
-    // TODO SQLiteDriver 有bug，使用$regex会报错，等修 https://github.com/koishijs/koishi/issues/894
     const selection = this.ctx.database.select('drift_bottle', {
       $or: [
         { userId: { $regex: new RegExp(s) } },

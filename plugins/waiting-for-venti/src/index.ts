@@ -218,8 +218,7 @@ async function countWaiting (ctx: Context, guildId: string) {
           $.eq(row.guildId, guildId)
         )
     )
-    .evaluate((row) => $.count(row.onebot))
-    .execute()
+    .execute((row) => $.count(row.onebot))
 }
 
 /**

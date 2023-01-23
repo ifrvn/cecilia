@@ -10,7 +10,10 @@
     "moduleResolution": "node",
     "strictNullChecks": true,
     "jsx": "react-jsx",
-    "jsxImportSource": "@satorijs/element"
+    "jsxImportSource": "@satorijs/element",
+    "types": [
+      "yml-register/types"
+    ]
   },
   "exclude": [
     "node_modules"

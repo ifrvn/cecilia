@@ -10,5 +10,5 @@
     "strict": true,
     "strictNullChecks": true
   },
-  "include": ["*.ts", "*.vue"],
+  "include": ["./*.ts", "./*.vue"],
 }

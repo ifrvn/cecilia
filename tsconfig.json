@@ -19,7 +19,5 @@
       "*": ["packages/*/src"]
     },
   },
-  "files": [],
-  "include": ["src", "koishi.config.js", ".eslintrc.js"],
   "exclude": ["node_modules"]
 }

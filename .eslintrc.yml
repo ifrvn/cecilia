@@ -4,6 +4,7 @@ env:
   es2021: true
   node: true
 extends:
+  - "plugin:markdown/recommended"
   - "plugin:vue/vue3-essential"
   - "plugin:@typescript-eslint/recommended"
   - "standard-with-typescript"
@@ -22,7 +23,7 @@ parserOptions:
       "./packages/**/tsconfig.json",
       "./plugins/**/tsconfig.json",
     ]
-  extraFileExtensions: [".vue"]
+  extraFileExtensions: [".vue", ".md"]
 plugins:
   - "@typescript-eslint"
 rules:

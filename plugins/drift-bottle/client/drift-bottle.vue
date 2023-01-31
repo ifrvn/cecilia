@@ -85,104 +85,104 @@
 </style>
 
 <script lang="ts" setup>
-import { send } from "@koishijs/client";
-import { DriftBottle } from "@ifrank/koishi-plugin-drift-bottle/src";
-import { onMounted, ref, watch } from "vue";
-import { ElMessage } from "element-plus";
-import { Search } from "@element-plus/icons-vue";
-import { throttle } from "lodash";
+import { send } from '@koishijs/client'
+import { DriftBottle } from '@ifrank/koishi-plugin-drift-bottle/src'
+import { onMounted, ref, watch } from 'vue'
+import { ElMessage } from 'element-plus'
+import { Search } from '@element-plus/icons-vue'
+import { throttle } from 'lodash'
 
-const page = ref(1);
-const totalLines = ref(0);
-const totalPages = ref(0);
+const page = ref(1)
+const totalLines = ref(0)
+const totalPages = ref(0)
 
 type TableRow = DriftBottle & { isBanned?: boolean };
 
-const tableData = ref<TableRow[]>();
+const tableData = ref<TableRow[]>()
 
-const searchKey = ref("");
+const searchKey = ref('')
 
 onMounted(() => {
-  loadData();
-});
+  loadData()
+})
 
 const loadData = () => {
-  send("get-data", page.value).then((res) => {
-    totalLines.value = res.totalLines;
-    totalPages.value = res.totalPages;
-    tableData.value = res.data;
+  send('get-data', page.value).then((res) => {
+    totalLines.value = res.totalLines
+    totalPages.value = res.totalPages
+    tableData.value = res.data
     tableData.value.forEach((element, index) => {
       tableData.value![index] = Object.assign(element, {
         isBanned: Date.parse(element.bannedAt as unknown as string) > 0,
-      });
-    });
-  });
-};
+      })
+    })
+  })
+}
 
 const handlePageChanged = (currentPage: number) => {
-  page.value = currentPage;
-  if (searchKey.value === "") {
-    loadData();
+  page.value = currentPage
+  if (searchKey.value === '') {
+    loadData()
   } else {
-    search();
+    search()
   }
-};
+}
 
 watch(searchKey, () => {
-  search();
-});
+  search()
+})
 
 const search = throttle(
   () => {
-    send("search", searchKey.value, page.value).then((res) => {
-      totalLines.value = res.totalLines;
-      totalPages.value = res.totalPages;
-      tableData.value = res.data;
+    send('search', searchKey.value, page.value).then((res) => {
+      totalLines.value = res.totalLines
+      totalPages.value = res.totalPages
+      tableData.value = res.data
       tableData.value.forEach((element, index) => {
         tableData.value![index] = Object.assign(element, {
           isBanned: Date.parse(element.bannedAt as unknown as string) > 0,
-        });
-      });
-    });
+        })
+      })
+    })
   },
   500,
   {
     leading: false,
     trailing: true,
   }
-);
+)
 
 const fixImg = (html: string): string => {
-  const regex = /<image .* url="(https:\/\/gchat\.qpic\.cn\/[^"]*)".*\/>/i;
+  const regex = /<image .* url="(https:\/\/gchat\.qpic\.cn\/[^"]*)".*\/>/i
   while (regex.test(html)) {
     html = html.replace(
       'url="https://gchat.qpic.cn',
       'referrerPolicy="no-referrer" width="80px" src="https://gchat.qpic.cn'
-    );
+    )
   }
-  return html;
-};
+  return html
+}
 
 const toLocalString = (s: string) => {
-  const date = new Date(Date.parse(s));
-  return date.toLocaleString("zh-CN", { timeZone: "Asia/Shanghai" });
-};
+  const date = new Date(Date.parse(s))
+  return date.toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' })
+}
 
 const switchBan = (id: number, ban: boolean) => {
-  send("switch-ban", id, ban)
+  send('switch-ban', id, ban)
     .then(() => {
       ElMessage({
-        message: `操作成功！`,
-        type: "success",
-      });
-      loadData();
+        message: '操作成功！',
+        type: 'success',
+      })
+      loadData()
     })
     .catch((error) => {
-      ElMessage.error("操作失败：" + error);
-    });
-};
+      ElMessage.error('操作失败：' + error)
+    })
+}
 
 const filterBannedAt = (value: string, row: TableRow) => {
-  return row.isBanned!.toString() === value;
-};
+  return row.isBanned!.toString() === value
+}
 </script>

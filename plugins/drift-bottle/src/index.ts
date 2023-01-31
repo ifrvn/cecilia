@@ -93,8 +93,6 @@ export default class DriftBottlePlugin {
     this.logger = ctx.logger('DriftBottlePlugin')
     this.service = new BottleService(ctx)
 
-    this.config = new DriftBottlePlugin.Config(config)
-
     ctx.model.extend(
       this.tableName,
       {

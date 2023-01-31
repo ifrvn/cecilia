@@ -58,6 +58,7 @@
     "@ifrank/koishi-plugin-drift-bottle": "workspace:1.0.0",
     "@ifrank/koishi-plugin-venti-voices-chinese": "workspace:1.0.0",
     "@ifrank/koishi-plugin-waiting-for-venti": "workspace:1.0.0",
+    "@ifrank/koishi-plugin-xibao": "workspace:1.0.0",
     "@koishijs/plugin-adapter-onebot": "^5.5.4",
     "@koishijs/plugin-admin": "^1.1.5",
     "@koishijs/plugin-analytics": "^1.0.0",
@@ -79,6 +80,7 @@
     "koishi-plugin-assets-smms": "1.1.0",
     "koishi-plugin-dialogue": "4.0.6",
     "koishi-plugin-gocqhttp": "^3.3.1",
-    "koishi-plugin-migration": "^0.1.0"
+    "koishi-plugin-migration": "^0.1.0",
+    "koishi-plugin-puppeteer": "3.4.1"
   }
 }

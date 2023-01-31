@@ -12,6 +12,7 @@ plugins:
     ~@ifrank/waiting-for-venti: {}
     ~@ifrank/ad:
       frequence: 1
+    '@ifrank/xibao': {}
   group:basic:
     help: {}
     rate-limit: {}
@@ -19,6 +20,7 @@ plugins:
     commands: {}
     ~admin: {}
     ~bind: {}
+    puppeteer: {}
   group:console:
     analytics: {}
     console:

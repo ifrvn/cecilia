@@ -5,12 +5,13 @@ nickname:
   - 温迪
   - Venti
   - venti
-
 plugins:
   group:dev:
     ~@ifrank/drift-bottle: {}
     ~@ifrank/venti-voices-chinese: {}
     ~@ifrank/waiting-for-venti: {}
+    ~@ifrank/ad:
+      frequence: 1
   group:basic:
     help: {}
     rate-limit: {}
@@ -35,16 +36,14 @@ plugins:
     ~auth: {}
   group:database:
     database-sqlite: {}
-    assets-smms:
-      token:
-    $collapsed: true
+    assets-smms: {}
   group:adapter:
-    gocqhttp: {}
+    gocqhttp:
+      logLevel: 3
     adapter-onebot:
       selfId: '123456789'
       protocol: ws
       endpoint: ws://127.0.0.1:6700
       gocqhttp:
         enabled: true
-        password:
   ~dialogue: {}

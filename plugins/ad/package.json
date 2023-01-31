@@ -1,0 +1,41 @@
+{
+  "name": "@ifrank/koishi-plugin-ad",
+  "description": "Advertising to Koishi messages.",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "author": "iFrank <frank@ifrank.cn>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ifrvn/cecilia.git",
+    "directory": "plugins/ad"
+  },
+  "keywords": [
+    "bot",
+    "chatbot",
+    "koishi",
+    "ad",
+    "advertising"
+  ],
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "koishi": {
+    "description": {
+      "en": "What's wrong with a little advertising??",
+      "zh": "加点广告怎么了？"
+    }
+  },
+  "peerDependencies": {
+    "koishi": "^4.11.4"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "typescript": "^4.9.5"
+  }
+}

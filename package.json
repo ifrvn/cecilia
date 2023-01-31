@@ -54,6 +54,7 @@
     "yml-register": "^1.1.0"
   },
   "dependencies": {
+    "@ifrank/koishi-plugin-ad": "workspace:1.0.0",
     "@ifrank/koishi-plugin-drift-bottle": "workspace:1.0.0",
     "@ifrank/koishi-plugin-venti-voices-chinese": "workspace:1.0.0",
     "@ifrank/koishi-plugin-waiting-for-venti": "workspace:1.0.0",

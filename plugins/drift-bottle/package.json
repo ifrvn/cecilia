@@ -15,8 +15,8 @@
   },
   "devDependencies": {
     "@element-plus/icons-vue": "^2.0.10",
-    "@koishijs/client": "^5.1.14",
-    "@koishijs/plugin-console": "^5.1.14",
+    "@koishijs/client": "^5.2.1",
+    "@koishijs/plugin-console": "^5.2.1",
     "@minatojs/driver-sqlite": "^3.2.3",
     "@minatojs/sql.js": "^2.0.0",
     "@satorijs/adapter-onebot": "^5.5.4",
@@ -26,6 +26,6 @@
     "vue": "^3.2.45"
   },
   "peerDependencies": {
-    "koishi": "^4.11.3"
+    "koishi": "^4.11.4"
   }
 }

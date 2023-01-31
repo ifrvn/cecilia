@@ -1,7 +1,7 @@
 {
   "name": "@ifrank/koishi-plugin-ad",
   "description": "Advertising to Koishi messages.",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -27,8 +27,8 @@
   },
   "koishi": {
     "description": {
-      "en": "What's wrong with a little advertising??",
-      "zh": "加点广告怎么了？"
+      "en": "(Unfinished) What's wrong with a little advertising??",
+      "zh": "（未完成）加点广告怎么了？"
     }
   },
   "peerDependencies": {

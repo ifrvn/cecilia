@@ -10,6 +10,7 @@ npm-debug.log
 yarn-debug.log
 yarn-error.log
 tsconfig.tsbuildinfo
+tsconfig.temp.json
 
 .eslintcache
 .DS_Store
@@ -19,3 +20,5 @@ tsconfig.tsbuildinfo
 *.ntvs*
 *.njsproj
 *.sln
+
+external/*

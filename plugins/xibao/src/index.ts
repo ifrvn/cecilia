@@ -1,6 +1,7 @@
+import { readFileSync } from 'fs'
+import path from 'path'
 import { Context, Schema } from 'koishi'
 import {} from 'koishi-plugin-puppeteer'
-import img from './background_1024x768.jpg'
 
 export const name = 'xibao'
 export const using = ['puppeteer'] as const
@@ -10,6 +11,7 @@ export interface Config {}
 export const Config: Schema<Config> = Schema.object({})
 
 export function apply(ctx: Context, config: Config) {
+  const img = readFileSync(path.resolve(__dirname, './background_1024x768.jpg'))
   ctx.command('喜报 <text:text>')
     .action(async (_, text) => {
       const html =

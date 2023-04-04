@@ -1,31 +1,55 @@
 {
   "name": "@ifrank/koishi-plugin-drift-bottle",
-  "private": true,
-  "version": "1.0.0",
+  "version": "2.0.0-dev.1",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
     "lib",
     "dist"
   ],
-  "scripts": {},
+  "author": "iFrank <frank@ifrank.cn>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ifrvn/cecilia.git"
+  },
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "koishi": {
+    "hidden": true,
+    "description": {
+      "zh": "漂流瓶~~嘿嘿嘿（暂时只支持MySQL和SQLite数据库）（使用方法请阅读README文档）",
+      "en": "Drift bottle for Koishi (temporary only supports MySQL and SQLite database) (see README for usage)"
+    },
+    "service": {
+      "required": ["database"]
+    }
+  },
+  "keywords": [
+    "chatbot",
+    "koishi",
+    "plugin",
+    "drift",
+    "bottle",
+    "漂流瓶"
+  ],
   "dependencies": {
     "lodash": "^4.17.21",
     "outdent": "^0.8.0"
   },
   "devDependencies": {
-    "@element-plus/icons-vue": "^2.0.10",
-    "@koishijs/client": "^5.2.1",
-    "@koishijs/plugin-console": "^5.2.1",
-    "@minatojs/driver-sqlite": "^3.2.3",
-    "@minatojs/sql.js": "^2.0.0",
-    "@satorijs/adapter-onebot": "^5.5.4",
+    "@element-plus/icons-vue": "^2.1.0",
+    "@koishijs/client": "^5.5.7",
+    "@koishijs/plugin-console": "^5.5.7",
+    "@minatojs/core": "^2.3.1",
+    "@minatojs/driver-sqlite": "^3.4.1",
+    "@minatojs/driver-mysql": "^2.4.2",
+    "@satorijs/adapter-onebot": "^5.6.5",
     "@types/lodash": "^4.14.191",
-    "cosmokit": "^1.4.0",
-    "element-plus": "^2.2.28",
-    "vue": "^3.2.45"
+    "cosmokit": "^1.4.1"
   },
   "peerDependencies": {
-    "koishi": "^4.11.4"
+    "koishi": "^4.12.2"
   }
 }

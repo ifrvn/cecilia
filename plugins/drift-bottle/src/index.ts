@@ -39,7 +39,7 @@ export interface DriftBottle {
   content: string
   isPublic: number
   createdAt: Date
-  bannedAt: Date
+  bannedAt: Date | null
 }
 
 export interface Config {
@@ -102,14 +102,17 @@ export default class DriftBottlePlugin {
         content: 'string',
         isPublic: {
           type: 'unsigned',
+          nullable: false,
           initial: 1
         },
         createdAt: {
-          type: 'timestamp'
+          type: 'timestamp',
+          nullable: false
         },
         bannedAt: {
           type: 'timestamp',
-          initial: new Date(0)
+          nullable: true,
+          initial: null
         }
       },
       {
@@ -330,7 +333,7 @@ export default class DriftBottlePlugin {
 
   private async switchBan (id: number, ban = true) {
     return await this.service.update(id, {
-      bannedAt: ban ? new Date() : new Date(0)
+      bannedAt: ban ? new Date() : null
     })
   }
 }

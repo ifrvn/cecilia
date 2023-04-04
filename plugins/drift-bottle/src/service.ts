@@ -1,7 +1,7 @@
 import SQLiteDriver from '@minatojs/driver-sqlite/lib/index'
-import { BindParams, Statement } from '@minatojs/sql.js'
-import { Context, Direction, Keys, Selection, $ } from 'koishi'
-import { DriftBottle } from '.'
+import MySQLDriver from '@minatojs/driver-mysql/lib/index'
+import { Context, Direction, Keys, $ } from 'koishi'
+import { DriftBottle } from './index'
 import { outdent } from 'outdent'
 
 declare module 'koishi' {
@@ -11,11 +11,6 @@ declare module 'koishi' {
 }
 
 export default class BottleService {
-  private readonly db = () => {
-    const driver = this.ctx.database.drivers.default as SQLiteDriver
-    return driver.db
-  }
-
   constructor(private readonly ctx: Context) {}
 
   async count() {
@@ -27,14 +22,14 @@ export default class BottleService {
   async getAll(
     options: {
       fields?: Array<Keys<DriftBottle, unknown>>
-      orderBy?: { field: Selection.Field<DriftBottle>; order?: Direction }
+      orderBy?: { field: Keys<DriftBottle>; order?: Direction }
       limit?: number
       offset?: number
     } = {
       limit: 10,
       offset: 0,
     }
-  ) { 
+  ) {
     const { fields, orderBy, limit, offset } = options
     const selection = this.ctx.database.select('drift_bottle')
     if (orderBy != null) selection.orderBy(orderBy.field, orderBy.order)
@@ -89,43 +84,67 @@ export default class BottleService {
     return await this.ctx.database.create('drift_bottle', data)
   }
 
-  async getOneRandomly(guildId: string): Promise<DriftBottle> {
-    const tableName = 'drift_bottle'
-    return await (this.exec(
-      'getAsObject',
-      outdent`
-      SELECT * FROM ${tableName} AS t1  JOIN (
-        SELECT ROUND(
-          ${Math.random()} * ((SELECT MAX(id) FROM ${tableName})-(SELECT MIN(id) FROM ${tableName}))
-          +(SELECT MIN(id) FROM ${tableName})
-        ) AS id
-      ) AS t2 WHERE (
-        t1.id >= t2.id
-        AND t1.bannedAt = 0
-        AND (t1.isPublic = 1 OR (t1.isPublic = 0 AND guildId = :guildId))
-      )
-      ORDER BY t1.id LIMIT 1
-      `,
-      {guildId}
-    ) as unknown as Promise<DriftBottle>)
+  async getOneRandomly(guildId: string): Promise<DriftBottle | undefined> {
+    if (this.checkDatabaseType() === 'mysql') {
+      const SQL_MYSQL = outdent`
+        SELECT * FROM drift_bottle AS t1 WHERE
+          t1.bannedAt IS NULL
+          AND (t1.isPublic = 1 OR (t1.isPublic = 0 AND t1.guildId = ${guildId}))
+        ORDER BY RAND() LIMIT 1;`
+      return this.exec_MySQL(SQL_MYSQL)
+    }else{
+      const SQL_SQLITE = outdent`
+        SELECT * FROM drift_bottle AS t1 WHERE
+          t1.bannedAt = NULL
+          AND (t1.isPublic = 1 OR (t1.isPublic = 0 AND t1.guildId = ${guildId}))
+        ORDER BY RANDOM() LIMIT 1;`
+      return this.exec_SQLite(SQL_SQLITE)as unknown as Promise<DriftBottle>
+    }
   }
 
-  private async exec<K extends 'get' | 'getAsObject' | 'run'>(
-    action: K,
-    sql: string,
-    params: BindParams = null
-  ) {
+  private checkDatabaseType() {
+    // @ts-expect-error sqlite属性不在Driver类型声明中
+    if (this.ctx.database.drivers.default.sqlite)
+      return 'sqlite'
+    else return 'mysql'
+  }
+
+  private dbDriver() {
+    const driver = this.ctx.database.drivers.default as SQLiteDriver | MySQLDriver
+    // @ts-expect-error sqlite属性不在Driver类型声明中
+    if (typeof driver.sqlite !== 'undefined') {
+      return (driver as SQLiteDriver)
+    } else {
+      return (driver as MySQLDriver)
+    }
+  }
+
+  private async exec_SQLite(sql: string) {
     const logger = this.ctx.logger('BottleService')
-    return await new Promise<ReturnType<Statement[K]>>((resolve, reject) => {
+    return await new Promise((resolve, reject) => {
       try {
-        const stmt =  this.db().prepare(sql)
-        const result = stmt[action](params) as ReturnType<Statement[K]>
+        const stmt =  (this.dbDriver() as SQLiteDriver).db.prepare(sql)
+        stmt.step()
+        const result = stmt.getAsObject()
         logger.debug('SQL > %c', sql)
+        logger.info(result)
         resolve(result)
       } catch (e) {
         logger.warn('SQL > %c', sql)
         reject(e)
       }
     })
+  }
+
+  private async exec_MySQL(sql: string) {
+    const logger = this.ctx.logger('BottleService')
+    try {
+      const result = await (this.dbDriver() as MySQLDriver).query<DriftBottle[]>(sql)
+      logger.info('SQL > %c', sql)
+      logger.info(result)
+      return result[0]
+    } catch (e) {
+      logger.warn('SQL > %c', sql)
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Context, Logger, Universal, Next, segment, Session, Schema } from 'koishi'
+import { Context, Logger, Universal, Next, h, Session, Schema } from 'koishi'
 import {} from '@koishijs/plugin-console'
 import {} from 'cosmokit'
 import { OneBot } from '@satorijs/adapter-onebot'
@@ -213,19 +213,16 @@ export default class DriftBottlePlugin {
       const msg = await session.bot.getMessage(session.guildId!, messageId)
       return msg
     } catch (error) {
-      await session.send(
-        segment('quote', { id: session.messageId! }).toString() +
-          this.templates.messageNotFound
-      )
+      await session.send(h.quote(session.messageId).toString() + this.templates.messageNotFound)
       throw error
     }
   }
 
   private async messageTypeGuard (session: Session, message: string) {
-    segment.parse(message).forEach((msg) => {
+    h.parse(message).forEach((msg) => {
       if (msg.type !== 'text' && msg.type !== 'image') {
         void session.send(
-          segment('quote', { id: session.messageId! }).toString() +
+          h.quote(session.messageId).toString() +
             this.templates.allowEitherTextOrImage
         )
         throw new Error(`Message type ${msg.type} is not allowed!`)
@@ -246,13 +243,13 @@ export default class DriftBottlePlugin {
 
     await this.save(content, session.userId!, session.guildId!, isPublic)
     await session.send(
-      segment('quote', { id: session.messageId! }).toString() +
+      h.quote(session.messageId).toString() +
         (isPublic ? this.templates.ok : this.templates.privateOk)
     )
   }
 
   async addQuoteBottle (session: Session, message: string, quote: Universal.Message) {
-    const parsedMsg = segment.parse(message)
+    const parsedMsg = h.parse(message)
     const { throwBottleReg } = this.regs()
 
     const regexpSearchRes = throwBottleReg.exec(parsedMsg[parsedMsg.length - 1].attrs.content!)
@@ -267,7 +264,7 @@ export default class DriftBottlePlugin {
       isPublic
     )
     await session.send(
-      segment('quote', { id: session.messageId! }).toString() +
+      h.quote(session.messageId).toString() +
         (isPublic ? this.templates.ok : this.templates.privateOk)
     )
   }
@@ -290,7 +287,7 @@ export default class DriftBottlePlugin {
 
     await this.switchBan(bottle[0].id)
     await session.send(
-      segment('quote', { id: session.messageId! }).toString() + this.templates.removeBottle
+      h.quote(session.messageId).toString() + this.templates.removeBottle
     )
   }
 
@@ -306,9 +303,9 @@ export default class DriftBottlePlugin {
 
     if (bottle[0].guildId === session.guildId) {
       await session.send(
-        segment('quote', { id: session.messageId! }).toString() +
+        h.quote(session.messageId).toString() +
           '我知道，是' +
-          segment('at', { id: bottle[0].userId }).toString() +
+          h.at(bottle[0].userId).toString() +
           '丢的！'
       )
     } else {

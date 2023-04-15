@@ -45,30 +45,18 @@ export interface DriftBottle {
 export interface Config {
   throwBottleKey?: string
   fishBottleKey?: string
-  prefix?: string
 }
 
 export default class DriftBottlePlugin {
   static using = ['database', 'console', 'logger'] as const
   static Config = Schema.object({
     throwBottleKey: Schema.string().default('丢个瓶子'),
-    fishBottleKey: Schema.string().default('捞瓶子'),
-    prefix: Schema.string().default('#')
+    fishBottleKey: Schema.string().default('捞瓶子')
   })
 
   private readonly tableName = 'drift_bottle'
   private readonly logger: Logger
   private readonly NUMBER_PER_PAGE = 10
-  private readonly regs = () => {
-    return {
-      fishBottleReg: new RegExp(
-        `^((?:${this.config.prefix ?? ''})${this.config.fishBottleKey ?? '捞瓶子'})\\s*$`
-      ),
-      throwBottleReg: new RegExp(
-        `^\\s*(?:${this.config.prefix ?? ''})${this.config.throwBottleKey ?? '丢个瓶子'}(（|\\()?\\s*((?:.|\\n)*)$`
-      )
-    }
-  }
 
   private readonly templates = {
     ok: '好啦',
@@ -90,6 +78,7 @@ export default class DriftBottlePlugin {
     private readonly ctx: Context,
     private readonly config: Config
   ) {
+    ctx.i18n.define('zh', require('./locales/zh'))
     this.logger = ctx.logger('DriftBottlePlugin')
     this.service = new BottleService(ctx)
 
@@ -166,45 +155,53 @@ export default class DriftBottlePlugin {
   async callback (session: Session, next: Next) {
     if (session.guildId == null) return this.templates.notInGroup
 
-    const message = session.content
-    const parsedMsg = segment.parse(message)
-    const { fishBottleReg, throwBottleReg } = this.regs()
-
-    try {
-      if (fishBottleReg.test(message)) {
-        // 捞瓶子
-        return await this.fishBottle(session)
-      } else if (parsedMsg[0].type === 'text' && throwBottleReg.test(message)) {
-        // 扔瓶子
-        return await this.addSimpleBottle(session, message)
-      } else if ((session.quote != null) && parsedMsg.length > 1) {
-        // 处理引用消息
-        const content = parsedMsg[parsedMsg.length - 1].attrs.content
-        if (content != null) {
-          if (throwBottleReg.test(content)) {
-          // 扔瓶子（引用）
-            return await this.addQuoteBottle(session, message, session.quote)
-          } else if (/^\s*(丢掉|删除|回收|删掉)\s*$/.test(content)) {
-          // 删除瓶子
-            return await this.removeBottle(session, session.quote.content!)
-          } else if (/^\s*(谁丢的|谁扔的|谁的瓶子)\s*$/.test(content)) {
-          // 查询谁丢的瓶子
-            return await this.blame(session, session.quote.content!)
-          }
-        }
-      }
-    } catch (error) {
-      // "UNIQUE constraint failed: drift_bottle.content, drift_bottle.guildId, drift_bottle.isPublic"
-      if (error instanceof Error && error.message.startsWith('UNIQUE constraint failed')) {
-        await session.send(
-          segment('quote', { id: session.messageId! }).toString() +
-            this.templates.duplicateContent
-        )
-        this.logger.warn(error)
-      } else {
-        this.logger.error(error)
-      }
-    }
+    this.ctx.command('捞瓶子').action(({session}) => {
+      return this.fishBottle(session)
+    })
+    this.ctx.command('丢个瓶子').action(({session}) => {
+      return this.addSimpleBottle(session)
+    })
+    this.ctx.command('谁扔的').action(({session}) => {
+      return this.blame(session, session.quote.content!)
+    })
+    this.ctx.command('炸瓶子').action(({session}) => {
+      return this.removeBottle(session, session.quote.content!)
+    })
+    // try {
+    //   if (fishBottleReg.test(message)) {
+    //     // 捞瓶子
+    //     return await this.fishBottle(session)
+    //   } else if (parsedMsg[0].type === 'text' && throwBottleReg.test(message)) {
+    //     // 扔瓶子
+    //     return await this.addSimpleBottle(session, message)
+    //   } else if ((session.quote != null) && parsedMsg.length > 1) {
+    //     // 处理引用消息
+    //     const content = parsedMsg[parsedMsg.length - 1].attrs.content
+    //     if (content != null) {
+    //       if (throwBottleReg.test(content)) {
+    //       // 扔瓶子（引用）
+    //         return await this.addQuoteBottle(session, message, session.quote)
+    //       } else if (/^\s*(丢掉|删除|回收|删掉)\s*$/.test(content)) {
+    //       // 删除瓶子
+    //         return await this.removeBottle(session, session.quote.content!)
+    //       } else if (/^\s*(谁丢的|谁扔的|谁的瓶子)\s*$/.test(content)) {
+    //       // 查询谁丢的瓶子
+    //         return await this.blame(session, session.quote.content!)
+    //       }
+    //     }
+    //   }
+    // } catch (error) {
+    //   // "UNIQUE constraint failed: drift_bottle.content, drift_bottle.guildId, drift_bottle.isPublic"
+    //   if (error instanceof Error && error.message.startsWith('UNIQUE constraint failed')) {
+    //     await session.send(
+    //       h.quote(session.messageId! }).toString() +
+    //         this.templates.duplicateContent
+    //     )
+    //     this.logger.warn(error)
+    //   } else {
+    //     this.logger.error(error)
+    //   }
+    // }
     return await next()
   }
 

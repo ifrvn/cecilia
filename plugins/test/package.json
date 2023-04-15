@@ -1,6 +1,6 @@
 {
-  "name": "@ifrank/koishi-plugin-ad",
-  "description": "Advertising to Koishi messages.",
+  "name": "@ifrank/koishi-plugin-test",
+  "description": "TEST",
   "version": "0.1.0",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -9,26 +9,19 @@
     "dist"
   ],
   "author": "iFrank <frank@ifrank.cn>",
-  "license": "MIT",
+  "private": "true",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ifrvn/cecilia.git",
-    "directory": "plugins/ad"
+    "directory": "plugins/test"
   },
-  "keywords": [
-    "bot",
-    "chatbot",
-    "koishi",
-    "ad",
-    "advertising"
-  ],
   "scripts": {
     "build": "tsc -b"
   },
   "koishi": {
     "description": {
-      "en": "(Unfinished) What's wrong with a little advertising??",
-      "zh": "（未完成）加点广告怎么了？"
+      "en": "For test",
+      "zh": "测试用"
     }
   },
   "peerDependencies": {

@@ -15,6 +15,6 @@
     "@types/lodash": "4.14.191"
   },
   "peerDependencies": {
-    "koishi": "^4.11.4"
+    "koishi": "^4.11.6"
   }
 }

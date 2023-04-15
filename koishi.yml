@@ -1,28 +1,39 @@
 host: localhost
 port: 5140
 maxPort: 5149
+selfUrl: http://localhost:5141/
+logger:
+  levels:
+    root: 2
 nickname:
   - 温迪
   - Venti
   - venti
 plugins:
+  ~@ifrank/test: null
   group:dev:
+    ~send-as-image: null
     ~@ifrank/drift-bottle: {}
     ~@ifrank/venti-voices-chinese: {}
     ~@ifrank/waiting-for-venti: {}
     ~@ifrank/ad:
       frequence: 1
-    '@ifrank/xibao': {}
+    ~@ifrank/xibao: {}
   group:basic:
+    $collapsed: true
+    ~admin: null
     help: {}
-    rate-limit: {}
+    ~rate-limit: {}
     locales: {}
     commands: {}
-    ~admin: {}
     ~bind: {}
+    messages: {}
+    hmr: {}
     puppeteer: {}
   group:console:
+    $collapsed: true
     analytics: {}
+    chat:350900: {}
     console:
       open: false
     dataview: {}
@@ -35,17 +46,35 @@ plugins:
         endpoint: https://registry.koishi.chat/index.json
     sandbox: {}
     status: {}
-    ~auth: {}
+    ~login: {}
+    ~live2d:2mh1ms: {}
   group:database:
-    database-sqlite: {}
-    assets-smms: {}
+    ~cache-memory:sqr02i: {}
+    ~database-mysql:2hcy4q: {}
+    database-sqlite: null
+    ~assets-local:
+      selfUrl: ''
+    ~assets-smms: {}
   group:adapter:
-    gocqhttp:
-      logLevel: 3
-    adapter-onebot:
-      selfId: '123456789'
-      protocol: ws
-      endpoint: ws://127.0.0.1:6700
+    $collapsed: true
+    ~gocqhttp:
+      logLevel: 2
+    ~adapter-onebot:
+      selfId:
+      protocol:
+      endpoint:
       gocqhttp:
-        enabled: true
-  ~dialogue: {}
+        enabled: false
+  group:dialogue:
+    $collapsed: true
+    ~dialogue: {}
+    ~dialogue-flow:ifgyid: {}
+    ~dialogue-context:n7lhwu: {}
+    ~dialogue-time:i2hsu5: {}
+    ~dialogue-author:lvqwxb: {}
+    ~dialogue-rate-limit:cpdfe3: {}
+    ~dialogue-user-filter:1psgh3: {}
+  group:genshin:
+    $collapsed: true
+    ~genshin-voice:1r9692: {}
+    ~enka:ynwt50: null

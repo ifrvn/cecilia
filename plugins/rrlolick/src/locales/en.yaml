@@ -1,0 +1,7 @@
+commands:
+  rrlolick:
+    description: An old-school scam
+
+    messages:
+      loading: Loading, please wait...
+      sit-and-relax: Sit back and relax. Just a few seconds...

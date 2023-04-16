@@ -1,0 +1,7 @@
+commands:
+  rrlolick:
+    description: 一种经典骗术
+
+    messages:
+      loading: 加载中，请稍后...
+      sit-and-relax: 坐和放宽，马上就好...

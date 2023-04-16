@@ -1,0 +1,31 @@
+{
+  "name": "koishi-plugin-rrlolick",
+  "description": "是诈骗 | rr scam",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "author": "iFrank <frank@ifrank.cn>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "koishi": {
+    "description": {
+      "en": "A time-wasting plug-in",
+      "zh": "一款浪费时间的插件"
+    }
+  },
+  "keywords": [
+    "chatbot",
+    "koishi",
+    "plugin",
+    "rickroll"
+  ],
+  "peerDependencies": {
+    "koishi": "4.12.5"
+  }
+}

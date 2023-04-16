@@ -23,7 +23,9 @@
       "en": "Drift bottle for Koishi (temporary only supports MySQL and SQLite database) (see README for usage)"
     },
     "service": {
-      "required": ["database"]
+      "required": [
+        "database"
+      ]
     }
   },
   "keywords": [
@@ -40,13 +42,13 @@
   },
   "devDependencies": {
     "@element-plus/icons-vue": "^2.1.0",
-    "@koishijs/client": "^5.5.7",
-    "@koishijs/plugin-console": "^5.5.7",
+    "@koishijs/client": "^5.6.1",
+    "@koishijs/plugin-console": "^5.6.1",
     "@minatojs/core": "^2.3.1",
-    "@minatojs/driver-sqlite": "^3.4.1",
-    "@minatojs/driver-mysql": "^2.4.2",
-    "@satorijs/adapter-onebot": "^5.6.5",
-    "@types/lodash": "^4.14.191",
+    "@minatojs/driver-sqlite": "^3.4.3",
+    "@minatojs/driver-mysql": "^2.4.4",
+    "@satorijs/adapter-onebot": "^5.6.6",
+    "@types/lodash": "^4.14.194",
     "cosmokit": "^1.4.1"
   },
   "peerDependencies": {

@@ -24,3 +24,5 @@ tsconfig.temp.json
 *.ntvs*
 *.njsproj
 *.sln
+
+plugins/test

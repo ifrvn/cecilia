@@ -1,6 +1,5 @@
-import { Context, Logger, Universal, Next, h, Session, Schema } from 'koishi'
+import { Context, Logger, h, Session, Schema } from 'koishi'
 import {} from '@koishijs/plugin-console'
-import {} from 'cosmokit'
 import { OneBot } from '@satorijs/adapter-onebot'
 import { resolve } from 'path'
 import BottleService from './service'
@@ -42,35 +41,15 @@ export interface DriftBottle {
   bannedAt: Date | null
 }
 
-export interface Config {
-  throwBottleKey?: string
-  fishBottleKey?: string
-}
+export interface Config {}
 
 export default class DriftBottlePlugin {
   static using = ['database', 'console', 'logger'] as const
-  static Config = Schema.object({
-    throwBottleKey: Schema.string().default('丢个瓶子'),
-    fishBottleKey: Schema.string().default('捞瓶子')
-  })
+  static Config = Schema.object({})
 
   private readonly tableName = 'drift_bottle'
   private readonly logger: Logger
   private readonly NUMBER_PER_PAGE = 10
-
-  private readonly templates = {
-    ok: '好啦',
-    privateOk: '好啦，群内瓶+1',
-    noBottle: '还没有瓶子可捞哦',
-    notInGroup: '请在群组内使用该功能',
-    messageNotFound:
-      '瓶子似乎被可莉炸飞了...请把瓶子内容重新发一遍再尝试扔瓶子吧',
-    bottleNotFound: '奇怪，没有找到这个瓶子',
-    allowEitherTextOrImage: '只能往瓶子里丢文字和图片，且不能有@好友哦',
-    duplicateContent: '已经有一样的瓶子了~',
-    removeBottle: '瓶子封印成功！',
-    accessDenied: '你有事吗？有事请找我妈~'
-  }
 
   private readonly service: BottleService
 
@@ -110,6 +89,44 @@ export default class DriftBottlePlugin {
       }
     )
 
+    this.ctx.command('driftbottle')
+      .alias('db', '漂流瓶')
+
+    this.ctx.command('db.fish')
+      .alias('捞瓶子')
+      .action(async ({session}) => {
+        if (session)
+          return this.fishBottle(session)
+      })
+
+    this.ctx.command('db.send <message:text>')
+      .alias('丢个瓶子', '丢瓶子', '扔个瓶子', '扔瓶子')
+      .option('private', '-p')
+      .action(async ({session, options}, message) => {
+        if (session) {
+          if (session.guildId == null) return session.text('.not-in-guild')
+          return this.addBottle(session, message, !options?.private)
+        }
+      })
+
+    this.ctx.command('db.blame <message:text>')
+      .alias('谁扔的', '谁发的', '谁丢的')
+      .action(async ({session}, message) => {
+        if (session?.quote?.content){
+          if (session.guildId == null) return session.text('.not-in-guild')
+          return this.blame(session, message)
+        }
+      })
+
+    this.ctx.command('db.block <message:text>')
+      .alias('炸瓶子')
+      .action(async ({session}, message) => {
+        if (session?.quote?.content){
+          if (session.guildId == null) return session.text('.not-in-guild')
+          return this.removeBottle(session, message)
+        }
+      })
+
     ctx.console.addListener('get-data', async (page) => {
       const [totalLines, data] = await Promise.all([
         this.service.count(),
@@ -148,165 +165,76 @@ export default class DriftBottlePlugin {
       dev: resolve(__dirname, '../client/index.ts'),
       prod: resolve(__dirname, '../dist')
     })
-
-    ctx.middleware(this.callback.bind(this))
-  }
-
-  async callback (session: Session, next: Next) {
-    if (session.guildId == null) return this.templates.notInGroup
-
-    this.ctx.command('捞瓶子').action(({session}) => {
-      return this.fishBottle(session)
-    })
-    this.ctx.command('丢个瓶子').action(({session}) => {
-      return this.addSimpleBottle(session)
-    })
-    this.ctx.command('谁扔的').action(({session}) => {
-      return this.blame(session, session.quote.content!)
-    })
-    this.ctx.command('炸瓶子').action(({session}) => {
-      return this.removeBottle(session, session.quote.content!)
-    })
-    // try {
-    //   if (fishBottleReg.test(message)) {
-    //     // 捞瓶子
-    //     return await this.fishBottle(session)
-    //   } else if (parsedMsg[0].type === 'text' && throwBottleReg.test(message)) {
-    //     // 扔瓶子
-    //     return await this.addSimpleBottle(session, message)
-    //   } else if ((session.quote != null) && parsedMsg.length > 1) {
-    //     // 处理引用消息
-    //     const content = parsedMsg[parsedMsg.length - 1].attrs.content
-    //     if (content != null) {
-    //       if (throwBottleReg.test(content)) {
-    //       // 扔瓶子（引用）
-    //         return await this.addQuoteBottle(session, message, session.quote)
-    //       } else if (/^\s*(丢掉|删除|回收|删掉)\s*$/.test(content)) {
-    //       // 删除瓶子
-    //         return await this.removeBottle(session, session.quote.content!)
-    //       } else if (/^\s*(谁丢的|谁扔的|谁的瓶子)\s*$/.test(content)) {
-    //       // 查询谁丢的瓶子
-    //         return await this.blame(session, session.quote.content!)
-    //       }
-    //     }
-    //   }
-    // } catch (error) {
-    //   // "UNIQUE constraint failed: drift_bottle.content, drift_bottle.guildId, drift_bottle.isPublic"
-    //   if (error instanceof Error && error.message.startsWith('UNIQUE constraint failed')) {
-    //     await session.send(
-    //       h.quote(session.messageId! }).toString() +
-    //         this.templates.duplicateContent
-    //     )
-    //     this.logger.warn(error)
-    //   } else {
-    //     this.logger.error(error)
-    //   }
-    // }
-    return await next()
-  }
-
-  private async getMessage (session: Session, messageId: string) {
-    try {
-      const msg = await session.bot.getMessage(session.guildId!, messageId)
-      return msg
-    } catch (error) {
-      await session.send(h.quote(session.messageId).toString() + this.templates.messageNotFound)
-      throw error
-    }
   }
 
   private async messageTypeGuard (session: Session, message: string) {
+    this.logger.info(message)
     h.parse(message).forEach((msg) => {
       if (msg.type !== 'text' && msg.type !== 'image') {
         void session.send(
           h.quote(session.messageId).toString() +
-            this.templates.allowEitherTextOrImage
+            session.text('.send.illegal-content')
         )
-        throw new Error(`Message type ${msg.type} is not allowed!`)
+        throw new Error(session.text('.msg-type-not-allowed', [msg.type]))
       }
     })
   }
 
-  async addSimpleBottle (session: Session, message: string) {
-    const { throwBottleReg } = this.regs()
+  async addBottle (session: Session, message: string, isPublic = true) {
+    await this.messageTypeGuard(session, message)
 
-    const regexpSearchRes = throwBottleReg.exec(message)
-    const isPublic = regexpSearchRes![1] == null
-    const content = regexpSearchRes![2]
-
-    if (content.length === 0) return
-
-    await this.messageTypeGuard(session, content)
-
-    await this.save(content, session.userId!, session.guildId!, isPublic)
+    await this.save(message, session.userId!, session.guildId!, isPublic)
     await session.send(
       h.quote(session.messageId).toString() +
-        (isPublic ? this.templates.ok : this.templates.privateOk)
-    )
-  }
-
-  async addQuoteBottle (session: Session, message: string, quote: Universal.Message) {
-    const parsedMsg = h.parse(message)
-    const { throwBottleReg } = this.regs()
-
-    const regexpSearchRes = throwBottleReg.exec(parsedMsg[parsedMsg.length - 1].attrs.content!)
-    const isPublic = regexpSearchRes![1] == null
-
-    await this.messageTypeGuard(session, quote.content!)
-
-    await this.save(
-      quote.content!,
-      session.userId!,
-      session.guildId!,
-      isPublic
-    )
-    await session.send(
-      h.quote(session.messageId).toString() +
-        (isPublic ? this.templates.ok : this.templates.privateOk)
+        (isPublic ? session.text('.send.success') : session.text('.send.success-private'))
     )
   }
 
   async fishBottle (session: Session) {
     const bottle = await this.service.getOneRandomly(session.guildId!)
-    if (bottle == null) return this.templates.noBottle
+    if (bottle == null) return session.text('.fish.no-bottle')
     await session.send(bottle.content)
   }
 
   async removeBottle (session: Session, content: string) {
-    const member = await session.onebot?.getGroupMemberInfo(
+    // TODO: 支持其他平台
+    if (session.onebot) {
+      const member = await session.onebot?.getGroupMemberInfo(
       session.guildId!,
       session.userId!
-    )
-    if (member?.role !== 'admin') return this.templates.accessDenied
+      )
+      if (member?.role !== 'admin') return session.text('.access-denied')
+    }
 
     const bottle = await this.service.find(content)
-    if (bottle.length === 0) return this.templates.bottleNotFound
+    if (bottle.length === 0) return session.text('.bottle-not-found')
 
     await this.switchBan(bottle[0].id)
     await session.send(
-      h.quote(session.messageId).toString() + this.templates.removeBottle
+      h.quote(session.messageId).toString() + session.text('.block.success')
     )
   }
 
   async blame (session: Session, content: string) {
-    const member = await session.onebot?.getGroupMemberInfo(
-      session.guildId!,
-      session.userId!
-    )
-    if (member?.role !== 'admin') return this.templates.accessDenied
+    // TODO: 支持其他平台
+    if (session.onebot) {
+      const member = await session.onebot?.getGroupMemberInfo(
+        session.guildId!,
+        session.userId!
+      )
+      if (member?.role !== 'admin') return session.text('.access-denied')
+    }
 
     const bottle = await this.service.find(content)
-    if (bottle.length === 0) return this.templates.bottleNotFound
+    if (bottle.length === 0) return session.text('.bottle-not-found')
 
     if (bottle[0].guildId === session.guildId) {
       await session.send(
         h.quote(session.messageId).toString() +
-          '我知道，是' +
-          h.at(bottle[0].userId).toString() +
-          '丢的！'
+          session.text('.blame.result', [h.at(bottle[0].userId).toString()])
       )
     } else {
-      await session.send('是其他群丢的哦')
+      await session.send(session.text('.blame.other-guild'))
     }
   }
 

@@ -1,21 +1,38 @@
 commands:
-  teach:
-    options:
-      frozen.true: 锁定这个问答
-      frozen.false: 解锁这个问答
-      writer: 添加或设置问题的作者
-      writer.: 添加或设置匿名问题
-      substitute.true: 由教学者完成问答的执行
-      substitute.false: 由触发者完成问答的执行
-
+  driftbottle:
+    description: 漂流瓶
     messages:
-      writer:
-        target-not-exist: 指定的目标用户不存在。
-        detail:
-          writer: 来源：{0}
-          unknown: 未知用户
-          frozen: 此问答已锁定。
-          substitute: 回答中的指令由教学者代行。
-        abstract:
-          frozen: 锁定
-          substitute: 代行
+      not-in-guild: 请在群组内使用该功能
+
+    fish:
+      description: 捞瓶子
+      messages:
+        no-bottle: 还没有瓶子可捞哦
+    send:
+      description: 丢瓶子
+      options:
+        private: 群内瓶子，不会被其他群捞出。不加此选项则默认为公共瓶子，所有群都可捞出。
+      messages:
+        success: 好啦
+        success-private: 好啦，群内瓶+1
+        illegal-content: 只能往瓶子里丢文字和图片，且不能有@好友哦
+        duplicate-content: 已经有一样的瓶子了~
+        msg-type-not-allowed: 检查到不被接受的消息类型：{0}
+        not-in-guild: 请在群组内使用该功能
+
+    blame:
+      description: 查询瓶子是谁扔的（管理员）
+      messages:
+        result: 我知道，是{0}丢的！
+        other-guild: 是其他群丢的哦
+        bottle-not-found: 奇怪，没有找到这个瓶子
+        access-denied: 你有事吗？有事请找我妈~
+        not-in-guild: 请在群组内使用该功能
+
+    block:
+      description: 屏蔽一个瓶子（管理员）
+      messages:
+        success: 瓶子封印成功！
+        bottle-not-found: 奇怪，没有找到这个瓶子
+        access-denied: 你有事吗？有事请找我妈~
+        not-in-guild: 请在群组内使用该功能

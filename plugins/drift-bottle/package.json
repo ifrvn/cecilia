@@ -48,8 +48,7 @@
     "@minatojs/driver-sqlite": "^3.4.3",
     "@minatojs/driver-mysql": "^2.4.4",
     "@satorijs/adapter-onebot": "^5.6.6",
-    "@types/lodash": "^4.14.194",
-    "cosmokit": "^1.4.1"
+    "@types/lodash": "^4.14.194"
   },
   "peerDependencies": {
     "koishi": "^4.12.2"

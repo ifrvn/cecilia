@@ -88,15 +88,15 @@ export default class BottleService {
     if (this.checkDatabaseType() === 'mysql') {
       const SQL_MYSQL = outdent`
         SELECT * FROM drift_bottle AS t1 WHERE
-          t1.bannedAt IS NULL
-          AND (t1.isPublic = 1 OR (t1.isPublic = 0 AND t1.guildId = ${guildId}))
+        (t1.bannedAt IS NULL OR t1.bannedAt = 0)
+          AND (t1.isPublic = 1 OR (t1.isPublic = 0 AND t1.guildId = "${guildId}"))
         ORDER BY RAND() LIMIT 1;`
       return this.exec_MySQL(SQL_MYSQL)
     }else{
       const SQL_SQLITE = outdent`
         SELECT * FROM drift_bottle AS t1 WHERE
-          t1.bannedAt = NULL
-          AND (t1.isPublic = 1 OR (t1.isPublic = 0 AND t1.guildId = ${guildId}))
+          (t1.bannedAt = NULL OR t1.bannedAt = 0)
+          AND (t1.isPublic = 1 OR (t1.isPublic = 0 AND t1.guildId = "${guildId}"))
         ORDER BY RANDOM() LIMIT 1;`
       return this.exec_SQLite(SQL_SQLITE)as unknown as Promise<DriftBottle>
     }

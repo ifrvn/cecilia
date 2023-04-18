@@ -231,7 +231,7 @@ export default class DriftBottlePlugin {
     if (bottle[0].guildId === session.guildId) {
       await session.send(
         h.quote(session.messageId).toString() +
-          session.text('.result', [h.at(bottle[0].userId).toString()])
+          session.text('.result', [h.at(bottle[0].userId)])
       )
     } else {
       await session.send(session.text('.other-guild'))

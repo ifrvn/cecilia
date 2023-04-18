@@ -173,7 +173,7 @@ export default class DriftBottlePlugin {
       if (msg.type !== 'text' && msg.type !== 'image') {
         void session.send(
           h.quote(session.messageId).toString() +
-            session.text('.send.illegal-content')
+            session.text('.illegal-content')
         )
         throw new Error(session.text('.msg-type-not-allowed', [msg.type]))
       }
@@ -186,13 +186,13 @@ export default class DriftBottlePlugin {
     await this.save(message, session.userId!, session.guildId!, isPublic)
     await session.send(
       h.quote(session.messageId).toString() +
-        (isPublic ? session.text('.send.success') : session.text('.send.success-private'))
+        (isPublic ? session.text('.success') : session.text('.success-private'))
     )
   }
 
   async fishBottle (session: Session) {
     const bottle = await this.service.getOneRandomly(session.guildId!)
-    if (bottle == null) return session.text('.fish.no-bottle')
+    if (bottle == null) return session.text('.no-bottle')
     await session.send(bottle.content)
   }
 
@@ -211,7 +211,7 @@ export default class DriftBottlePlugin {
 
     await this.switchBan(bottle[0].id)
     await session.send(
-      h.quote(session.messageId).toString() + session.text('.block.success')
+      h.quote(session.messageId).toString() + session.text('.success')
     )
   }
 
@@ -231,10 +231,10 @@ export default class DriftBottlePlugin {
     if (bottle[0].guildId === session.guildId) {
       await session.send(
         h.quote(session.messageId).toString() +
-          session.text('.blame.result', [h.at(bottle[0].userId).toString()])
+          session.text('.result', [h.at(bottle[0].userId).toString()])
       )
     } else {
-      await session.send(session.text('.blame.other-guild'))
+      await session.send(session.text('.other-guild'))
     }
   }
 

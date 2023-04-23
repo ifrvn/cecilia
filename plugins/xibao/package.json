@@ -1,7 +1,7 @@
 {
   "name": "@ifrank/koishi-plugin-xibao",
-  "description": "喜报！",
-  "version": "1.0.1",
+  "description": "喜报！（还有悲报）",
+  "version": "1.1.0",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -19,23 +19,24 @@
     "bot",
     "chatbot",
     "koishi",
-    "喜报"
+    "喜报",
+    "悲报"
   ],
   "scripts": {
     "build": "tsc -b"
   },
   "koishi": {
     "description": {
-      "en": "Generate a certificate of the GOOD NEWS!!!",
-      "zh": "喜报！生成一份喜报！！！"
+      "en": "Generate a certificate of the GOOD NEWS!!!(And also bad news)",
+      "zh": "喜报！生成一份喜报！！！（还有悲报）"
     }
   },
   "peerDependencies": {
-    "koishi": "^4.11.6",
-    "koishi-plugin-puppeteer": "^3.4.3"
+    "koishi": "^4.12.6",
+    "koishi-plugin-puppeteer": "^3.5.0"
   },
   "devDependencies": {
-    "@types/node": "^18.15.11",
+    "@types/node": "^18.16.0",
     "typescript": "^4.9.5"
   },
   "dependencies": {}

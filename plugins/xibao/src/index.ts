@@ -55,7 +55,7 @@ export function apply(ctx: Context, config: Config) {
         html(
           text,
           '#000500',
-          '#daecdc',
+          '#c6c6c6',
           config.beibao.maxFontSize,
           config.beibao.minFontSize,
           config.beibao.offsetWidth,

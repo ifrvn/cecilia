@@ -6,7 +6,7 @@
 
 悲报...
 
-![悲报](./example-beibao.jpg)
+![悲报](./example-beibao.png)
 
 ## Usage | 使用方法
 

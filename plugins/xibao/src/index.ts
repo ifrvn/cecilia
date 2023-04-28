@@ -32,8 +32,11 @@ export const Config: Schema<Config> = Schema.object({
 })
 
 export function apply(ctx: Context, config: Config) {
-  ctx.command('喜报 <text:text>')
+  ctx.command('喜报 <text:text>', '生成一张喜报')
+    .usage('喜报 要在喜报上写的内容，支持换行')
+    .example('喜报 这可以喜')
     .action(async (_, text) => {
+      if (!text) return '请在指令空格后输入内容，具体使用方式请查看帮助信息'
       const img = readFileSync(path.resolve(__dirname, './xibao.jpg'))
       return await ctx.puppeteer.render(
         html(
@@ -48,8 +51,11 @@ export function apply(ctx: Context, config: Config) {
       )
     })
 
-  ctx.command('悲报 <text:text>')
+  ctx.command('悲报 <text:text>', '生成一张悲报')
+    .usage('悲报 要在悲报上写的内容，支持换行')
+    .example('悲报 这不可以喜')
     .action(async (_, text) => {
+      if (!text) return '请在指令空格后输入内容，具体使用方式请查看帮助信息'
       const img = readFileSync(path.resolve(__dirname, './beibao.jpg'))
       return await ctx.puppeteer.render(
         html(

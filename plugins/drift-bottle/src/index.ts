@@ -1,4 +1,5 @@
 import { Context, Logger, h, Session, Schema } from 'koishi'
+import {} from '@koishijs/assets'
 import {} from '@koishijs/plugin-console'
 import { OneBot } from '@satorijs/adapter-onebot'
 import { resolve } from 'path'
@@ -244,8 +245,17 @@ export default class DriftBottlePlugin {
     guildId: string,
     isPublic = true
   ) {
+    let transContent: string | null = null
+    if (this.ctx.assets) {
+      try {
+        transContent = await this.ctx.assets.transform(content)
+      } catch(error) {
+        this.logger.warn(error)
+      }
+    }
+
     return await this.service.create({
-      content,
+      content: transContent ?? content,
       userId,
       guildId,
       isPublic: isPublic ? 1 : 0,

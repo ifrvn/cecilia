@@ -25,6 +25,9 @@
     "service": {
       "required": [
         "database"
+      ],
+      "optional": [
+        "assets"
       ]
     }
   },
@@ -42,6 +45,7 @@
   },
   "devDependencies": {
     "@element-plus/icons-vue": "^2.1.0",
+    "@koishijs/assets": "^1.0.2",
     "@koishijs/client": "^5.6.1",
     "@koishijs/plugin-console": "^5.6.1",
     "@minatojs/core": "^2.3.1",

@@ -18,13 +18,13 @@ export interface Config {
 
 export const Config: Schema<Config> = Schema.object({
   xibao: Schema.object({
-    maxFontSize: Schema.number().min(1).default(100).description('最大字体大小（px）'),
+    maxFontSize: Schema.number().min(1).default(80).description('最大字体大小（px）'),
     minFontSize: Schema.number().min(1).default(38).description('最小字体大小（px）'),
     offsetWidth: Schema.number().min(1).default(900)
       .description('单行最大宽度（px），任意一行文本达到此宽度后会缩小字体以尽可能不超出此宽度，直到字体大小等于`minFontSize`'),
   }).description('喜报配置'),
   beibao: Schema.object({
-    maxFontSize: Schema.number().min(1).default(100).description('最大字体大小（px）'),
+    maxFontSize: Schema.number().min(1).default(90).description('最大字体大小（px）'),
     minFontSize: Schema.number().min(1).default(38).description('最小字体大小（px）'),
     offsetWidth: Schema.number().min(1).default(900)
       .description('单行最大宽度（px），任意一行文本达到此宽度后会缩小字体以尽可能不超出此宽度，直到字体大小等于`minFontSize`'),

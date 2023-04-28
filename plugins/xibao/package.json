@@ -1,7 +1,7 @@
 {
   "name": "@ifrank/koishi-plugin-xibao",
   "description": "喜报！（还有悲报）",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [

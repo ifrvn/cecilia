@@ -19,20 +19,16 @@ export interface Config {
 
 export const Config: Schema<Config> = Schema.object({
   xibao: Schema.object({
-    fontFamily: Schema.string().default('"Source Han Sans CN", "Helvetica Neue", Helvetica, Arial, sans-serif')
-      .description(`字体（参照 CSS 中的 [font-family](https://developer.mozilla.org/zh-CN/docs/Web/CSS/font-family) ）<br>
-      默认使用[思源黑体](https://github.com/adobe-fonts/source-han-sans/blob/master/README-CN.md)，
-      若系统中未安装该字体请[👉点击下载](https://www.aliyundrive.com/s/3vquFYbv2XW)，或自行设置其他字体`),
+    fontFamily: Schema.string().default('"Noto Sans SC", "Source Han Sans CN", sans-serif')
+      .description('字体（参照 CSS 中的 [font-family](https://developer.mozilla.org/zh-CN/docs/Web/CSS/font-family) ）'),
     maxFontSize: Schema.number().min(1).default(80).description('最大字体大小（px）'),
     minFontSize: Schema.number().min(1).default(38).description('最小字体大小（px）'),
     offsetWidth: Schema.number().min(1).default(900)
       .description('单行最大宽度（px），任意一行文本达到此宽度后会缩小字体以尽可能不超出此宽度，直到字体大小等于`minFontSize`'),
   }).description('喜报配置'),
   beibao: Schema.object({
-    fontFamily: Schema.string().default('"Source Han Sans CN", "Helvetica Neue", Helvetica, Arial, sans-serif')
-      .description(`字体（参照 CSS 中的 [font-family](https://developer.mozilla.org/zh-CN/docs/Web/CSS/font-family) ）<br>
-      默认使用[思源黑体](https://github.com/adobe-fonts/source-han-sans/blob/master/README-CN.md)，
-      若系统中未安装该字体请[👉点击下载](https://www.aliyundrive.com/s/3vquFYbv2XW)，或自行设置其他字体`),
+    fontFamily: Schema.string().default('"Noto Sans SC", "Source Han Sans CN", sans-serif')
+      .description('字体（参照 CSS 中的 [font-family](https://developer.mozilla.org/zh-CN/docs/Web/CSS/font-family) ）'),
     maxFontSize: Schema.number().min(1).default(90).description('最大字体大小（px）'),
     minFontSize: Schema.number().min(1).default(38).description('最小字体大小（px）'),
     offsetWidth: Schema.number().min(1).default(900)
@@ -95,6 +91,7 @@ function html(params: {
   return `<html>
   <head>
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@900&display=swap');
       body {
         width: 960px;
         height: 768px;

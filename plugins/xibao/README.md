@@ -10,6 +10,8 @@
 
 ## Usage | 使用方法
 
+### 指令
+
 喜报：
 
 >喜报 要在喜报上写的内容
@@ -21,6 +23,10 @@
 >悲报 要在悲报上写的内容
 >
 >也可以换行
+
+### 安装字体
+
+默认使用[思源黑体](https://github.com/adobe-fonts/source-han-sans/blob/master/README-CN.md)，若中文未正常显示请下载安装该字体，或在设置中更改为其他字体。
 
 ## License
 

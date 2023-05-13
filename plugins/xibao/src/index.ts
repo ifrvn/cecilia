@@ -7,6 +7,7 @@ export const name = 'xibao'
 export const using = ['puppeteer'] as const
 
 interface StyleConfig {
+  fontFamily: string
   maxFontSize: number
   minFontSize: number
   offsetWidth: number
@@ -18,12 +19,20 @@ export interface Config {
 
 export const Config: Schema<Config> = Schema.object({
   xibao: Schema.object({
+    fontFamily: Schema.string().default('"Source Han Sans CN", "Helvetica Neue", Helvetica, Arial, sans-serif')
+      .description(`字体（参照 CSS 中的 [font-family](https://developer.mozilla.org/zh-CN/docs/Web/CSS/font-family) ）<br>
+      默认使用[思源黑体](https://github.com/adobe-fonts/source-han-sans/blob/master/README-CN.md)，
+      若系统中未安装该字体请[👉点击下载](https://www.aliyundrive.com/s/3vquFYbv2XW)，或自行设置其他字体`),
     maxFontSize: Schema.number().min(1).default(80).description('最大字体大小（px）'),
     minFontSize: Schema.number().min(1).default(38).description('最小字体大小（px）'),
     offsetWidth: Schema.number().min(1).default(900)
       .description('单行最大宽度（px），任意一行文本达到此宽度后会缩小字体以尽可能不超出此宽度，直到字体大小等于`minFontSize`'),
   }).description('喜报配置'),
   beibao: Schema.object({
+    fontFamily: Schema.string().default('"Source Han Sans CN", "Helvetica Neue", Helvetica, Arial, sans-serif')
+      .description(`字体（参照 CSS 中的 [font-family](https://developer.mozilla.org/zh-CN/docs/Web/CSS/font-family) ）<br>
+      默认使用[思源黑体](https://github.com/adobe-fonts/source-han-sans/blob/master/README-CN.md)，
+      若系统中未安装该字体请[👉点击下载](https://www.aliyundrive.com/s/3vquFYbv2XW)，或自行设置其他字体`),
     maxFontSize: Schema.number().min(1).default(90).description('最大字体大小（px）'),
     minFontSize: Schema.number().min(1).default(38).description('最小字体大小（px）'),
     offsetWidth: Schema.number().min(1).default(900)
@@ -39,15 +48,16 @@ export function apply(ctx: Context, config: Config) {
       if (!text) return '请在指令空格后输入内容，具体使用方式请查看帮助信息'
       const img = readFileSync(path.resolve(__dirname, './xibao.jpg'))
       return await ctx.puppeteer.render(
-        html(
+        html({
           text,
-          '#ff0a0a',
-          '#ffde00',
-          config.xibao.maxFontSize,
-          config.xibao.minFontSize,
-          config.xibao.offsetWidth,
+          fontFamily: config.xibao.fontFamily,
+          fontColor: '#ff0a0a',
+          strokeColor:'#ffde00',
+          maxFontSize: config.xibao.maxFontSize,
+          minFontSize: config.xibao.minFontSize,
+          offsetWidth: config.xibao.offsetWidth,
           img
-        )
+        })
       )
     })
 
@@ -58,28 +68,30 @@ export function apply(ctx: Context, config: Config) {
       if (!text) return '请在指令空格后输入内容，具体使用方式请查看帮助信息'
       const img = readFileSync(path.resolve(__dirname, './beibao.jpg'))
       return await ctx.puppeteer.render(
-        html(
+        html({
           text,
-          '#000500',
-          '#c6c6c6',
-          config.beibao.maxFontSize,
-          config.beibao.minFontSize,
-          config.beibao.offsetWidth,
+          fontFamily: config.beibao.fontFamily,
+          fontColor: '#000500',
+          strokeColor: '#c6c6c6',
+          maxFontSize: config.beibao.maxFontSize,
+          minFontSize: config.beibao.minFontSize,
+          offsetWidth: config.beibao.offsetWidth,
           img
-        )
+        })
       )
     })
 }
 
-function html(
+function html(params: {
   text: string,
+  fontFamily: string,
   fontColor: string,
   strokeColor: string,
   maxFontSize: number,
   minFontSize: number,
   offsetWidth: number,
   img: Buffer
-) {
+}) {
   return `<html>
   <head>
     <style>
@@ -94,23 +106,24 @@ function html(
         text-align: center;
         margin: 0;
         font-weight: 900;
-        color: ${fontColor};
-        -webkit-text-stroke: 2.5px ${strokeColor};
-        background-image: url(data:image/png;base64,${img.toString('base64')});
+        font-family: ${params.fontFamily};
+        color: ${params.fontColor};
+        -webkit-text-stroke: 2.5px ${params.strokeColor};
+        background-image: url(data:image/png;base64,${params.img.toString('base64')});
         background-repeat: no-repeat;
       }
     </style>
   </head>
   <body>
-    <div>${text.replaceAll('\n', '</div><div>')}</div>
+    <div>${params.text.replaceAll('\n', '</div><div>')}</div>
   </body>
   <script>
     const dom = document.querySelector('body')
     const divs = dom.querySelectorAll('div')
-    let fontSize = ${maxFontSize}
+    let fontSize = ${params.maxFontSize}
     dom.style.fontSize = fontSize + 'px'
     divs.forEach(div => {
-      while (div.offsetWidth >= ${offsetWidth} && fontSize > ${minFontSize}) {
+      while (div.offsetWidth >= ${params.offsetWidth} && fontSize > ${params.minFontSize}) {
         dom.style.fontSize = --fontSize + 'px'
       }
     })

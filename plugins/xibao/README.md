@@ -26,7 +26,7 @@
 
 ### 字体
 
-默认使用 [Noto Sans SC](https://fonts.google.com/noto/specimen/Noto+Sans+SC) / [思源黑体](https://github.com/adobe-fonts/source-han-sans/blob/master/README-CN.md)，若中文未正常显示请下载安装该字体，或在设置中更改为其他字体。
+默认使用 [Noto Sans SC](https://fonts.google.com/noto/specimen/Noto+Sans+SC) / [思源黑体](https://github.com/adobe-fonts/source-han-sans/blob/master/README-CN.md)，可在设置中更改为其他字体，但需要在运行环境中安装相应的字体文件。
 
 ## License
 

@@ -112,18 +112,16 @@ function html(params: {
     </style>
   </head>
   <body>
-    <div>${params.text.replaceAll('\n', '</div><div>')}</div>
+    <div>${params.text.replaceAll('\n', '<br/>')}</div>
   </body>
   <script>
     const dom = document.querySelector('body')
-    const divs = dom.querySelectorAll('div')
+    const div = dom.querySelectorAll('div')[0]
     let fontSize = ${params.maxFontSize}
     dom.style.fontSize = fontSize + 'px'
-    divs.forEach(div => {
-      while (div.offsetWidth >= ${params.offsetWidth} && fontSize > ${params.minFontSize}) {
-        dom.style.fontSize = --fontSize + 'px'
-      }
-    })
+    while (div.offsetWidth >= ${params.offsetWidth} && fontSize > ${params.minFontSize}) {
+      dom.style.fontSize = --fontSize + 'px'
+    }
   </script>
 </html>`
 }

@@ -116,7 +116,7 @@ function html(params: {
   </body>
   <script>
     const dom = document.querySelector('body')
-    const div = dom.querySelectorAll('div')[0]
+    const div = dom.querySelector('div')
     let fontSize = ${params.maxFontSize}
     dom.style.fontSize = fontSize + 'px'
     while (div.offsetWidth >= ${params.offsetWidth} && fontSize > ${params.minFontSize}) {

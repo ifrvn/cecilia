@@ -35,6 +35,9 @@
     "koishi": "^4.12.6",
     "koishi-plugin-puppeteer": "^3.5.0"
   },
+  "dependencies": {
+    "outdent": "^0.8.0"
+  },
   "devDependencies": {
     "@types/node": "^18.16.16",
     "typescript": "^4.9.5"

@@ -1,7 +1,8 @@
 import { readFileSync } from 'fs'
 import path from 'path'
-import { Context, Schema } from 'koishi'
+import { type Context, Schema } from 'koishi'
 import {} from 'koishi-plugin-puppeteer'
+import outdent from 'outdent'
 
 export const name = 'xibao'
 export const using = ['puppeteer'] as const
@@ -88,7 +89,7 @@ function html(params: {
   offsetWidth: number,
   img: Buffer
 }) {
-  return `<html>
+  return outdent`<html>
   <head>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@900&display=swap');

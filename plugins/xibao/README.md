@@ -26,7 +26,7 @@
 
 ### 字体
 
-默认使用 [Noto Sans SC](https://fonts.google.com/noto/specimen/Noto+Sans+SC) / [思源黑体](https://github.com/adobe-fonts/source-han-sans/blob/master/README-CN.md)，可在设置中更改为其他字体，但需要在运行环境中安装相应的字体文件。
+默认使用 [HarmonyOS Sans SC](https://developer.harmonyos.com/cn/docs/design/des-guides/font-0000001157868583) / [思源黑体](https://github.com/adobe-fonts/source-han-sans/blob/master/README-CN.md)，可在设置中更改为其他字体，但需要在运行环境中安装相应的字体文件，或修改高级配置中的导入CSS链接。
 
 ## License
 

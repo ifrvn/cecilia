@@ -16,11 +16,14 @@ interface StyleConfig {
 export interface Config {
   xibao: StyleConfig
   beibao: StyleConfig
+  advanced: {
+    importCSS: string
+  }
 }
 
 export const Config: Schema<Config> = Schema.object({
   xibao: Schema.object({
-    fontFamily: Schema.string().default('"Noto Sans SC", "Source Han Sans CN", sans-serif')
+    fontFamily: Schema.string().default('"HarmonyOS Sans SC", "Source Han Sans CN", sans-serif')
       .description('字体（参照 CSS 中的 [font-family](https://developer.mozilla.org/zh-CN/docs/Web/CSS/font-family) ）'),
     maxFontSize: Schema.number().min(1).default(80).description('最大字体大小（px）'),
     minFontSize: Schema.number().min(1).default(38).description('最小字体大小（px）'),
@@ -28,13 +31,18 @@ export const Config: Schema<Config> = Schema.object({
       .description('单行最大宽度（px），任意一行文本达到此宽度后会缩小字体以尽可能不超出此宽度，直到字体大小等于`minFontSize`'),
   }).description('喜报配置'),
   beibao: Schema.object({
-    fontFamily: Schema.string().default('"Noto Sans SC", "Source Han Sans CN", sans-serif')
+    fontFamily: Schema.string().default('"HarmonyOS Sans SC", "Source Han Sans CN", sans-serif')
       .description('字体（参照 CSS 中的 [font-family](https://developer.mozilla.org/zh-CN/docs/Web/CSS/font-family) ）'),
     maxFontSize: Schema.number().min(1).default(90).description('最大字体大小（px）'),
     minFontSize: Schema.number().min(1).default(38).description('最小字体大小（px）'),
     offsetWidth: Schema.number().min(1).default(900)
       .description('单行最大宽度（px），任意一行文本达到此宽度后会缩小字体以尽可能不超出此宽度，直到字体大小等于`minFontSize`'),
   }).description('悲报配置'),
+  advanced: Schema.object({
+    importCSS: Schema.string().role('textarea')
+      .default('https://cdn.jsdelivr.net/gh/ifrvn/harmonyos-fonts/css/harmonyos_sans_sc.css')
+      .description('导入外部 CSS 样式，可用于自定义字体等。'),
+  }).description('高级配置'),
 })
 
 export function apply(ctx: Context, config: Config) {
@@ -53,7 +61,8 @@ export function apply(ctx: Context, config: Config) {
           maxFontSize: config.xibao.maxFontSize,
           minFontSize: config.xibao.minFontSize,
           offsetWidth: config.xibao.offsetWidth,
-          img
+          img,
+          importCSS: config.advanced.importCSS
         })
       )
     })
@@ -73,7 +82,8 @@ export function apply(ctx: Context, config: Config) {
           maxFontSize: config.beibao.maxFontSize,
           minFontSize: config.beibao.minFontSize,
           offsetWidth: config.beibao.offsetWidth,
-          img
+          img,
+          importCSS: config.advanced.importCSS
         })
       )
     })
@@ -87,12 +97,13 @@ function html(params: {
   maxFontSize: number,
   minFontSize: number,
   offsetWidth: number,
-  img: Buffer
+  img: Buffer,
+  importCSS: string
 }) {
   return outdent`<html>
   <head>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@900&display=swap');
+      @import url('${params.importCSS}');
       body {
         width: 960px;
         height: 768px;

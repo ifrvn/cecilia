@@ -100,7 +100,7 @@ function html(params: {
   img: Buffer,
   importCSS: string
 }) {
-  return outdent`<html>
+  return outdent`
   <head>
     <style>
       @import url('${params.importCSS}');
@@ -134,6 +134,5 @@ function html(params: {
     while (div.offsetWidth >= ${params.offsetWidth} && fontSize > ${params.minFontSize}) {
       dom.style.fontSize = --fontSize + 'px'
     }
-  </script>
-</html>`
+  </script>`
 }

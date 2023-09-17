@@ -40,7 +40,7 @@ export const Config: Schema<Config> = Schema.object({
   }).description('悲报配置'),
   advanced: Schema.object({
     importCSS: Schema.string().role('textarea')
-      .default('https://cdn.jsdelivr.net/gh/ifrvn/harmonyos-fonts/css/harmonyos_sans_sc.css')
+      .default('https://ghproxy.com/https://raw.githubusercontent.com/ifrvn/harmonyos-fonts/main/css/harmonyos_sans_sc.css')
       .description('导入外部 CSS 样式，可用于自定义字体等。'),
   }).description('高级配置'),
 })

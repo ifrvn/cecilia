@@ -17,11 +17,12 @@ export interface Config {
   xibao: StyleConfig
   beibao: StyleConfig
   advanced: {
-    importCSS: string
+    importCSS: string,
+    custom: string
   }
 }
 
-export const Config: Schema<Config> = Schema.object({
+export const Config = Schema.object({
   xibao: Schema.object({
     fontFamily: Schema.string().default('"HarmonyOS Sans SC", "Source Han Sans CN", sans-serif')
       .description('字体（参照 CSS 中的 [font-family](https://developer.mozilla.org/zh-CN/docs/Web/CSS/font-family) ）'),
@@ -38,11 +39,19 @@ export const Config: Schema<Config> = Schema.object({
     offsetWidth: Schema.number().min(1).default(900)
       .description('单行最大宽度（px），任意一行文本达到此宽度后会缩小字体以尽可能不超出此宽度，直到字体大小等于`minFontSize`'),
   }).description('悲报配置'),
-  advanced: Schema.object({
-    importCSS: Schema.string().role('textarea')
-      .default('https://ghproxy.com/https://raw.githubusercontent.com/ifrvn/harmonyos-fonts/main/css/harmonyos_sans_sc.css')
-      .description('导入外部 CSS 样式，可用于自定义字体等。'),
-  }).description('高级配置'),
+  advanced:
+    Schema.object({
+      importCSS: Schema.union([
+        Schema.const('https://gitee.com/ifrank/harmonyos-fonts/raw/main/css/harmonyos_sans_sc.css').description('国内源（Gitee）'),
+        Schema.const('https://raw.githubusercontent.com/ifrvn/harmonyos-fonts/main/css/harmonyos_sans_sc.css').description('国外源（GitHub）'),
+        Schema.object({
+          custom: Schema.string().role('textarea')
+            .default('https://ghproxy.com/https://raw.githubusercontent.com/ifrvn/harmonyos-fonts/main/css/harmonyos_sans_sc.css')
+            .description('自定义外部 CSS 地址')
+        }).description('自定义')
+      ]).description('导入外部 CSS 样式，可用于自定义字体等。')
+        .default('https://gitee.com/ifrank/harmonyos-fonts/raw/main/css/harmonyos_sans_sc.css'),
+    }).description('高级配置'),
 })
 
 export function apply(ctx: Context, config: Config) {
@@ -62,7 +71,7 @@ export function apply(ctx: Context, config: Config) {
           minFontSize: config.xibao.minFontSize,
           offsetWidth: config.xibao.offsetWidth,
           img,
-          importCSS: config.advanced.importCSS
+          importCSS: config.advanced.importCSS === 'custom' ? config.advanced.custom : config.advanced.importCSS
         })
       )
     })
@@ -83,7 +92,7 @@ export function apply(ctx: Context, config: Config) {
           minFontSize: config.beibao.minFontSize,
           offsetWidth: config.beibao.offsetWidth,
           img,
-          importCSS: config.advanced.importCSS
+          importCSS: config.advanced.importCSS === 'custom' ? config.advanced.custom : config.advanced.importCSS
         })
       )
     })
